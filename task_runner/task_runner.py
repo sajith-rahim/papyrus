@@ -7,6 +7,7 @@ from tqdm import tqdm
 
 from metrics import Metric
 from tracker import Phase, ExperimentTracker
+from utils import get_device
 
 
 class TaskRunner:
@@ -37,9 +38,11 @@ class TaskRunner:
 
     def run(self, desc: str, experiment: ExperimentTracker):
         self.model.train(self.phase is Phase.TRAIN)
-
+        device = get_device()
         for x, y in tqdm(self.dataloader, desc=desc, ncols=120):
-            loss, batch_accuracy = self._run_single(x, y)
+            x = x.to(device)
+            y = y.to(device)
+            loss, batch_accuracy = self._run_single_batch(x, y)
             experiment.add_batch_metric("accuracy", batch_accuracy, self.run_count)
 
             if self.optimizer:
@@ -47,7 +50,7 @@ class TaskRunner:
                 loss.backward()
                 self.optimizer.step()
 
-    def _run_single(self, x, y):
+    def _run_single_batch(self, x, y):
         self.run_count += 1
         batch_size: int = x.shape[0]
         prediction = self.model(x)
