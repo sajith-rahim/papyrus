@@ -1,3 +1,6 @@
+import argparse
+import sys
+
 import hydra
 import torch
 from hydra.core.config_store import ConfigStore
@@ -10,6 +13,8 @@ from task_runner.task_runner import TaskRunner
 from tracker import TensorboardExperiment, Phase
 
 # 1. initialize config store
+from utils import merge_config, get_device
+
 cs = ConfigStore.instance()
 
 # 2. load project config schema
@@ -18,10 +23,16 @@ cs.store(name="mnist_config", node=MNISTConfig)
 
 # 3. set path and filename
 @hydra.main(config_path="config/conf", config_name="config")
-def main(config: MNISTConfig) -> None:
+def run(config: MNISTConfig) -> None:
+
+
+    # overwrite with cli params
+    print(OmegaConf.from_cli())
+    config = merge_config(config, OmegaConf.from_cli())
 
     OmegaConf.set_readonly(config, True)
-    print(OmegaConf.to_yaml(config))
+    print(OmegaConf.to_yaml(config,resolve=True))
+    print(f"Active device: {get_device()}")
 
     # 4. define data-loaders
 
@@ -43,7 +54,8 @@ def main(config: MNISTConfig) -> None:
     )
 
     # 5. define model
-    model = MnistModel()
+    model = MnistModel().to(get_device())
+    print(model.__str__())
     optimizer = torch.optim.Adam(model.parameters(), lr=config.params.lr)
     loss_fn = torch.nn.CrossEntropyLoss(reduction="mean")
 
@@ -80,4 +92,8 @@ def main(config: MNISTConfig) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    #args = argparse.ArgumentParser(description='Papyrus')
+    #args.add_argument('-cfg_file', '--config_file', default=None, type=str,
+    #                help='config file name in ./config')
+    #print(args.parse_args())
+    run()
