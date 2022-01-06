@@ -23,7 +23,7 @@ class TensorboardExperiment:
         self._writer.flush()
 
     def add_graph(self,model, input):
-        self._writer.add_graph(model,input, verbose=True)
+        self._writer.add_graph(model,input, verbose=False)
 
     @staticmethod
     def _validate_log_dir(log_dir: str, create: bool = True):
