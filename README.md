@@ -169,6 +169,83 @@ python spawn.py ../new-project
 New project initialized at <PATH>\new-project
 ```
 
+# Folder Structure
+
+```powershell
+|   down_mnist.sh
+|   LICENSE
+|   main.py
+|   note.txt
+|   README.md
+|   requirements.txt
+|   spawn.py
++---base
+|   |   base_dataloader.py
+|   |   base_dataset.py
+|   |   base_model.py
+|   |   __init__.py
+|
++---config
+|   |   config.py
+|   |   mnist_config.py
+|   |   __init__.py
+|   |
+|   +---conf
+|   |   |   config.yaml
+|   |   |
+|   |   \---files
+|   |           mnist.yaml
+|
++---data
+|   \---raw
+|           t10k-images-idx3-ubyte.gz
+|           t10k-labels-idx1-ubyte.gz
+|           train-images-idx3-ubyte.gz
+|           train-labels-idx1-ubyte.gz
+|
++---dataloader
+|   |   mnist_dataloader.py
+|   |   __init__.py
+|   |
+|   +---dataset
+|   |   |   mnist.py
+|   |   |   __init__.py
+|
++---logs
+|   +---0
+|   |       events.out.tfevents.1641064646.Drovahkin.7748.0
+|
++---metrics
+|   |   losses.py
+|   |   metric.py
+|   |   __init__.py
+|
++---models
+|   |   mnist_model.py
+|   |   __init__.py
+|
++---task_runner
+|   |   task_runner.py
+|   |   __init__.py
+|
++---tracker
+|   |   phase.py
+|   |   tensorboard_experiment.py
+|   |   track.py
+|   |   __init__.py
+|   
+|
+\---utils
+    |   config_utils.py
+    |   data_utils.py
+    |   device_utils.py
+    |   download_utils.py
+    |   os_utils.py
+    |   tracker_utils.py
+    |   __init__.py
+```
+
+
 
 ## Deployment
 
