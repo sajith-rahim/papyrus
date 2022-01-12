@@ -11,6 +11,7 @@
 * Configuration based 
 * Command line option support to overide loaded config file
 * Tensorboard Support
+* Checkpointing and Resume
 
 
 ## Getting Started
@@ -261,7 +262,7 @@ Feel free to fork.
 
 ## Future
 
- * Resume and Checkpointing
+ * ~~Resume and Checkpointing~~
  * Add WANDB support
  * UI
 
