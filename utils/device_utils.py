@@ -27,4 +27,4 @@ def device_setup(n_gpu_in_use):
         n_gpu_in_use = n_gpu
     device = torch.device('cuda:0' if n_gpu_in_use > 0 else 'cpu')
     gpu_ids = list(range(n_gpu_in_use))
-    return device,
+    return device, gpu_ids
