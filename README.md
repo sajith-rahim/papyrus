@@ -27,7 +27,7 @@
 | validators| 1.18.5 |
 | matplotlib|3.4.1 |
 | requests|2.22.0 |
-| hydra| 2.5 |
+| hydra_core| 1.1.1 |
 | dataclasses| 0.8 |
 | numpy| 1.18.5 |
 | tqdm| 4.62.3 |
