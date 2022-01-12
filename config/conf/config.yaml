@@ -10,3 +10,8 @@ params:
   batch_size: 128
   shuffle: True
   num_workers: 2
+checkpoint:
+  save_interval: 10
+  resume: True
+  checkpoint_id: MnistModel-13_01_2022_02_55_19-0-0.284.pth.zip
+  path: ${hydra:runtime.cwd}/checkpoints
