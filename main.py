@@ -9,6 +9,7 @@ from omegaconf import OmegaConf
 from config import MNISTConfig
 from dataloader.mnist_dataloader import MnistDataLoader
 from models import MnistModel
+from store import Checkpointer
 from task_runner.task_runner import TaskRunner
 from tracker import TensorboardExperiment, Phase
 
@@ -57,6 +58,11 @@ def run(config: MNISTConfig) -> None:
     optimizer = torch.optim.Adam(model.parameters(), lr=config.params.lr)
     loss_fn = torch.nn.CrossEntropyLoss(reduction="mean")
 
+    # TODO - Refactor
+    # if resume; load checkpoints before initializing task runners
+    # checkpoint = Checkpointer.load_checkpoint(config.checkpoint.checkpoint_id, config.checkpoint.path,
+    #                                         str(get_device()))
+
     # 6. define task runners
     test_runner = TaskRunner(Phase.VAL, test_loader, model, loss_fn, config.checkpoint)
     train_runner = TaskRunner(Phase.TRAIN, train_loader, model, loss_fn, config.checkpoint, optimizer)
@@ -71,9 +77,16 @@ def run(config: MNISTConfig) -> None:
 
         # resume
         if config.checkpoint.resume:
-            _resume_id = int(config.checkpoint.checkpoint_id.split("-")[2])
-            print(f"{config.checkpoint.checkpoint_id} : Resuming from {_resume_id} of {config.params.epoch_count}")
-            epoch_id = _resume_id + 1
+            checkpoint_cfg = config.checkpoint
+            # load state dict
+            tr_iter = train_runner.load_checkpoint(checkpoint_cfg)
+            ts_iter = test_runner.load_checkpoint(checkpoint_cfg)
+            if ts_iter == -1 or tr_iter == -1:
+                print("Checkpoint load failed.")
+            assert ts_iter == tr_iter, "Inconsistency in checkpoint."
+            epoch_id = tr_iter + 1
+
+            print(f"{config.checkpoint.checkpoint_id} : Resuming from {epoch_id} of {config.params.epoch_count}")
 
         TaskRunner.run_epoch(test_runner, train_runner, tracker, epoch_id)
 
