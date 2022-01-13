@@ -95,6 +95,7 @@ class TaskRunner:
             self.model.load_state_dict(checkpoint.model_state_dict)
             if self.phase == Phase.TRAIN:
                 self.optimizer.load_state_dict(checkpoint.optimizer_state_dict)
+                self.model.train()
             return checkpoint.iteration
         except:
             return -1
