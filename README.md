@@ -5,6 +5,7 @@
 ▀▄▄▄▀▀▀▄▄▀▄▄▀▄▄▄▀▀▀▀▄▄▄▀▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀
 
 
+
 *Generic template to bootstrap your PyTorch project.*
 
 * Defines a generic folder structure
@@ -12,6 +13,8 @@
 * Command line option support to overide loaded config file
 * Tensorboard Support
 * Checkpointing and Resume
+
+
 
 
 ## Getting Started
@@ -125,7 +128,25 @@ python main.py ++params.other_params=abc
 *You can find more info about grouping* <a href="https://hydra.cc/docs/tutorials/basic/your_first_app/config_groups/" target="_blank">here</a>
 
 
+## Checkpointing
 
+Set the resume flag and checkpoint name in `config.yaml`
+
+```yaml
+*config.yaml*
+------------
+defaults:
+  ...
+paths:
+  ...
+params:
+  ...
+checkpoint:
+  save_interval: 5 #iter interval for checkpointing
+  resume: False # resume flag if True set checkpoint_id
+  checkpoint_id: <ID>.pt.zip # saved checkpoint filename
+  path: ${hydra:runtime.cwd}/checkpoints #save path
+```
 
 ## Tensorboard Server
 
@@ -261,6 +282,8 @@ Feel free to fork.
     MIT
 
 ## Future
+
+<img style="float:right;border:3px solid black" width=64 height=92 src="https://raw.githubusercontent.com/sajith-rahim/cdn/main/content/blog/media/warn_tag.png" />
 
  * ~~Resume and Checkpointing~~
  * Add WANDB support
