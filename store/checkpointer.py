@@ -19,7 +19,7 @@ class Checkpointer:
         ensure_dir(path)
         epoch_metric_val = f"{iteration}-{metric_val}"[:7]
         ts_identifier = datetime.datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
-        filename = f"{self.task_name}-{ts_identifier}-{epoch_metric_val}.pth.zip"
+        filename = f"{self.task_name}-{ts_identifier}-{epoch_metric_val}.pt.zip"
         filepath = os.path.join(path, filename)
         return filepath
 
@@ -40,6 +40,13 @@ class Checkpointer:
         torch.save(self, checkpoint_path)
 
     @staticmethod
-    def load_checkpoint(checkpoint_path, map_location='cpu'):
-        checkpoint = torch.load(checkpoint_path, map_location=map_location)
+    def read_checkpoint(filepath, map_location):
+        checkpoint = torch.load(filepath, map_location)
         return checkpoint
+
+    @staticmethod
+    def load_checkpoint(checkpoint_name, path, map_location='cpu'):
+        filepath = os.path.join(path, checkpoint_name)
+        return Checkpointer.read_checkpoint(filepath, map_location)
+
+
