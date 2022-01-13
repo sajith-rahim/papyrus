@@ -6,6 +6,7 @@ from torch.utils.data.dataloader import DataLoader
 from tqdm import tqdm
 
 from metrics import Metric
+from store import Checkpointer
 from tracker import Phase, ExperimentTracker
 from utils import get_device
 
@@ -17,6 +18,7 @@ class TaskRunner:
             dataloader: DataLoader,
             model: torch.nn.Module,
             loss_fn,
+            checkpoint_cfg,
             optimizer=None,
     ) -> None:
         self.phase = phase
@@ -26,6 +28,9 @@ class TaskRunner:
             raise AttributeError("No optimizer defined!")
         self.optimizer = optimizer
         self.loss_fn = loss_fn
+        # checkpointer
+        self.checkpointer = Checkpointer(model.__class__.__name__)
+        self.checkpoint_cfg = checkpoint_cfg
         # * * *
         self.run_count = 0
         self.accuracy_metric = Metric()
@@ -71,6 +76,19 @@ class TaskRunner:
         self.y_true_batches = []
         self.y_pred_batches = []
 
+    def set_checkpoint(self, epoch_id, metric_val):
+        interval = self.checkpoint_cfg.save_interval
+        if not isinstance(interval,int):
+            raise AttributeError("Invalid interval value. check config [checkpoint.save_interval]")
+        if epoch_id % interval == 0:
+            self.checkpointer.save_checkpoint(
+                self.checkpoint_cfg.path,
+                epoch_id,
+                metric_val,
+                self.model,
+                self.optimizer
+            )
+
     @staticmethod
     def run_epoch(
             test_runner,
@@ -88,6 +106,9 @@ class TaskRunner:
         # Testing Loop
         experiment.set_phase(Phase.VAL)
         test_runner.run("Validation Progress:", experiment)
+
+        # Save checkpoint
+        train_runner.set_checkpoint(epoch_id, train_runner.avg_accuracy)
 
         # Log Validation Epoch Metrics
         experiment.add_epoch_metric("accuracy", test_runner.avg_accuracy, epoch_id)
