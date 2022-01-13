@@ -24,14 +24,12 @@ cs.store(name="mnist_config", node=MNISTConfig)
 # 3. set path and filename
 @hydra.main(config_path="config/conf", config_name="config")
 def run(config: MNISTConfig) -> None:
-
-
     # overwrite with cli params
     print(OmegaConf.from_cli())
     config = merge_config(config, OmegaConf.from_cli())
 
     OmegaConf.set_readonly(config, True)
-    print(OmegaConf.to_yaml(config,resolve=True))
+    print(OmegaConf.to_yaml(config, resolve=True))
     print(f"Active device: {get_device()}")
 
     # 4. define data-loaders
@@ -59,10 +57,9 @@ def run(config: MNISTConfig) -> None:
     optimizer = torch.optim.Adam(model.parameters(), lr=config.params.lr)
     loss_fn = torch.nn.CrossEntropyLoss(reduction="mean")
 
-
     # 6. define task runners
-    test_runner = TaskRunner(Phase.VAL, test_loader, model, loss_fn)
-    train_runner = TaskRunner(Phase.TRAIN, train_loader, model, loss_fn, optimizer)
+    test_runner = TaskRunner(Phase.VAL, test_loader, model, loss_fn, config.checkpoint)
+    train_runner = TaskRunner(Phase.TRAIN, train_loader, model, loss_fn, config.checkpoint, optimizer)
 
     # 7. define tracker and set log dir
     tracker = TensorboardExperiment(log_path=config.paths.log)
@@ -71,6 +68,13 @@ def run(config: MNISTConfig) -> None:
 
     # 8. train
     for epoch_id in range(config.params.epoch_count):
+
+        # resume
+        if config.checkpoint.resume:
+            _resume_id = int(config.checkpoint.checkpoint_id.split("-")[2])
+            print(f"{config.checkpoint.checkpoint_id} : Resuming from {_resume_id} of {config.params.epoch_count}")
+            epoch_id = _resume_id + 1
+
         TaskRunner.run_epoch(test_runner, train_runner, tracker, epoch_id)
 
         # Compute Average Epoch Metrics
@@ -92,8 +96,8 @@ def run(config: MNISTConfig) -> None:
 
 
 if __name__ == "__main__":
-    #args = argparse.ArgumentParser(description='Papyrus')
-    #args.add_argument('-cfg_file', '--config_file', default=None, type=str,
+    # args = argparse.ArgumentParser(description='Papyrus')
+    # args.add_argument('-cfg_file', '--config_file', default=None, type=str,
     #                help='config file name in ./config')
-    #print(args.parse_args())
+    # print(args.parse_args())
     run()
