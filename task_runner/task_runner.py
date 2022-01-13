@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-import torchvision
 from sklearn.metrics import accuracy_score
 from torch.utils.data.dataloader import DataLoader
 from tqdm import tqdm
@@ -78,7 +77,7 @@ class TaskRunner:
 
     def set_checkpoint(self, epoch_id, metric_val):
         interval = self.checkpoint_cfg.save_interval
-        if not isinstance(interval,int):
+        if not isinstance(interval, int):
             raise AttributeError("Invalid interval value. check config [checkpoint.save_interval]")
         if epoch_id % interval == 0:
             self.checkpointer.save_checkpoint(
@@ -88,6 +87,17 @@ class TaskRunner:
                 self.model,
                 self.optimizer
             )
+
+    def load_checkpoint(self, checkpoint_cfg):
+        try:
+            checkpoint = Checkpointer.load_checkpoint(checkpoint_cfg.checkpoint_id, checkpoint_cfg.path,
+                                                      str(get_device()))
+            self.model.load_state_dict(checkpoint.model_state_dict)
+            if self.phase == Phase.TRAIN:
+                self.optimizer.load_state_dict(checkpoint.optimizer_state_dict)
+            return checkpoint.iteration
+        except:
+            return -1
 
     @staticmethod
     def run_epoch(
