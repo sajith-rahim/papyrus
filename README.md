@@ -3,7 +3,7 @@
 █▄─▄▄─██▀▄─██▄─▄▄─█▄─█─▄█▄─▄▄▀█▄─██─▄█─▄▄▄▄█
 ██─▄▄▄██─▀─███─▄▄▄██▄─▄███─▄─▄██─██─██▄▄▄▄─█
 ▀▄▄▄▀▀▀▄▄▀▄▄▀▄▄▄▀▀▀▀▄▄▄▀▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀
-
+<img src="https://visitor-badge.deta.dev/badge?page_id=sajith-rahim.papyrus&left_color=red&right_color=green"></img>
 
 
 *Generic template to bootstrap your PyTorch project.*
