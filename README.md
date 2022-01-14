@@ -3,7 +3,6 @@
 █▄─▄▄─██▀▄─██▄─▄▄─█▄─█─▄█▄─▄▄▀█▄─██─▄█─▄▄▄▄█
 ██─▄▄▄██─▀─███─▄▄▄██▄─▄███─▄─▄██─██─██▄▄▄▄─█
 ▀▄▄▄▀▀▀▄▄▀▄▄▀▄▄▄▀▀▀▀▄▄▄▀▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀
-<img src="https://visitor-badge.deta.dev/badge?page_id=sajith-rahim.papyrus&left_color=red&right_color=green"></img>
 
 
 *Generic template to bootstrap your PyTorch project.*
@@ -13,7 +12,7 @@
 * Command line option support to overide loaded config file
 * Tensorboard Support
 * Checkpointing and Resume
-
+<p><img src="https://visitor-badge.deta.dev/badge?page_id=sajith-rahim.papyrus&left_color=red&right_color=green"></img></p>
 <p>
 <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=PyTorch&logoColor=white" />
 
