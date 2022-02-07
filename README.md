@@ -282,6 +282,8 @@ New project initialized at <PATH>\new-project
 
 Feel free to fork.
 
+Do ⭐ if you found this useful. 😊 
+
 ## License
 
     MIT
