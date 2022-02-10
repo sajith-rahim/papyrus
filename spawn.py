@@ -13,7 +13,7 @@ assert len(sys.argv) == 2
 project_name = Path(sys.argv[1])
 target_dir = current_dir / project_name
 
-ignore = [".git", "data", "outputs", "spawn.py", "LICENSE", "venv", "__pycache__", "logs"]
+ignore = [".git", "data", "outputs", "spawn.py", "LICENSE", "venv", "__pycache__", "logs", "checkpoints"]
 copytree(current_dir, target_dir, ignore=ignore_patterns(*ignore))
 print(
     """
