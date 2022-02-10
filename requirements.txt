@@ -1,5 +1,5 @@
 tqdm==4.62.3
-numpy==1.18.5
+numpy==1.22.2
 torchvision==0.11.1
 omegaconf==2.1.1
 validators==0.18.2
@@ -7,5 +7,5 @@ torch==1.10.0
 hydra_core==1.1.1
 matplotlib==3.4.1
 requests==2.22.0
-dataclasses==0.8
+dataclasses==0.6
 scikit_learn==1.0.2
