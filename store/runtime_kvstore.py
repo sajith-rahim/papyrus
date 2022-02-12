@@ -1,5 +1,8 @@
 class RuntimeKeyValueStore:
 
+    def __init__(self):
+        pass
+
     def get_item(self, key):
         if hasattr(self, key):
             value = getattr(self, key)
