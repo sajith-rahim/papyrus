@@ -5,7 +5,7 @@
 ▀▄▄▄▀▀▀▄▄▀▄▄▀▄▄▄▀▀▀▀▄▄▄▀▀▄▄▀▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀
 
 
-*Generic template to bootstrap your PyTorch project.*
+*Generic (but opinionated) template to bootstrap your PyTorch project.*
 
 * Defines a generic folder structure
 * Configuration based 
