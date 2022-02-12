@@ -21,7 +21,7 @@ class BaseDataLoader(DataLoader):
             'num_workers': num_workers
         }
 
-    def create_dataloader(
+    def create_dataloader(self,
             root_path: str,
             data_file: str,
             label_file: str,
