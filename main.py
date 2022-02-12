@@ -59,9 +59,13 @@ def run(config: MNISTConfig) -> None:
     loss_fn = torch.nn.CrossEntropyLoss(reduction="mean")
 
     # TODO - Refactor
-    # if resume; load checkpoints before initializing task runners
-    # checkpoint = Checkpointer.load_checkpoint(config.checkpoint.checkpoint_id, config.checkpoint.path,
-    #                                         str(get_device()))
+    # Resume
+    resume_iter = -1
+    if config.checkpoint.resume:
+        checkpoint = Checkpointer.load_checkpoint(config.checkpoint.checkpoint_id, config.checkpoint.path,str(get_device()))
+        model.load_state_dict(checkpoint.model_state_dict)
+        optimizer.load_state_dict(checkpoint.optimizer_state_dict)
+        resume_iter = checkpoint.iteration
 
     # 6. define task runners
     test_runner = TaskRunner(Phase.VAL, test_loader, model, loss_fn, config.checkpoint)
@@ -76,16 +80,9 @@ def run(config: MNISTConfig) -> None:
     for epoch_id in range(config.params.epoch_count):
 
         # resume
-        if config.checkpoint.resume:
-            checkpoint_cfg = config.checkpoint
-            # load state dict
-            tr_iter = train_runner.load_checkpoint(checkpoint_cfg)
-            ts_iter = test_runner.load_checkpoint(checkpoint_cfg)
-            if ts_iter == -1 or tr_iter == -1:
-                print("Checkpoint load failed.")
-            assert ts_iter == tr_iter, "Inconsistency in checkpoint."
-            epoch_id = tr_iter + 1
-
+        if config.checkpoint.resume and resume_iter != -1:
+            epoch_id = resume_iter + 1
+            resume_iter = -1
             print(f"{config.checkpoint.checkpoint_id} : Resuming from {epoch_id} of {config.params.epoch_count}")
 
         TaskRunner.run_epoch(test_runner, train_runner, tracker, epoch_id)

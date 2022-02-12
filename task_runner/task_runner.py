@@ -87,7 +87,7 @@ class TaskRunner:
                 self.model,
                 self.optimizer
             )
-
+    # Deprecated
     def load_checkpoint(self, checkpoint_cfg):
         try:
             checkpoint = Checkpointer.load_checkpoint(checkpoint_cfg.checkpoint_id, checkpoint_cfg.path,
