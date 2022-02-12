@@ -8,6 +8,7 @@ from utils import ensure_dir
 class Checkpointer:
 
     def __init__(self, task_name):
+        self.model = None
         self.task_name = task_name
         self.model_state_dict = None
         self.optimizer_state_dict = None
@@ -36,6 +37,7 @@ class Checkpointer:
 
         self.optimizer_state_dict = optimizer.state_dict()
         self.iteration = iteration
+        self.model = model
 
         torch.save(self, checkpoint_path)
 
